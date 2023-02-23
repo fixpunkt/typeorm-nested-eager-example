@@ -1,15 +1,19 @@
 {
-    "version": "2.4.2",
     "compilerOptions": {
-        "lib": ["es5", "es6"],
-        "target": "es6",
         "module": "commonjs",
-        "moduleResolution": "node",
+        "declaration": true,
+        "removeComments": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "sourceMap": true
+        "target": "ES2021",
+        "lib": ["ES2021"],
+        "sourceMap": true,
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "incremental": true,
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "noImplicitThis": true
     },
-    "exclude": [
-        "node_modules"
-    ]
+    "exclude": ["**/dist/**", "**/node_modules/**"]
 }

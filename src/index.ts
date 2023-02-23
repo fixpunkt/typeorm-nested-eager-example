@@ -1,24 +1,42 @@
-import { Post } from "./entity/Post"
-import { Category } from "./entity/Category"
+import { inspect } from "util";
 import { AppDataSource } from "./data-source"
+import { B } from "./entity/B";
+import { C } from "./entity/C";
+import { D } from "./entity/D";
+import { A } from "./entity/A";
 
 AppDataSource.initialize()
   .then(async () => {
-    const category1 = new Category()
-    category1.name = "TypeScript"
-    await AppDataSource.manager.save(category1)
+    const a = new A();
+    const b = new B();
+    const c = new C();
+    const d = new D();
 
-    const category2 = new Category()
-    category2.name = "Programming"
-    await AppDataSource.manager.save(category2)
+    a.b = b;
+    b.c = c;
+    c.d = d;
 
-    const post = new Post()
-    post.title = "TypeScript"
-    post.text = `TypeScript is Awesome!`
-    post.categories = [category1, category2]
+    await AppDataSource.manager.save(a);
+    console.log(inspect(a, false, 10, true));
 
-    await AppDataSource.manager.save(post)
+    const aReloaded = await AppDataSource.manager.findOneOrFail(
+      A,
+      {
+        where: { id: a.id },
+        relations: [ 'b' ]
+      },
+    );
+    console.log('C should be loaded in the following, otherwise this is a bug:')
+    console.log(inspect(aReloaded, false, 10));
 
-    console.log("Post has been saved: ", post)
+    // const aReloaded = await AppDataSource.manager.findOneOrFail(
+    //   A,
+    //   {
+    //     where: { id: a.id },
+    //     // relations: [ 'a' ]
+    //   },
+    // );
+    // console.log(inspect(aReloaded, false, 10));
+
   })
   .catch((error) => console.log("Error: ", error))
